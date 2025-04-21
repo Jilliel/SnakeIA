@@ -87,7 +87,7 @@ class Game:
             
             if self.debug:
                 self.show()
-                sleep(0.3)
+                sleep(0.1)
         
     def show(self):
         """
