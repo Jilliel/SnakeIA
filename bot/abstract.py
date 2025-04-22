@@ -41,7 +41,7 @@ class AbstractSnake(ABC):
     """
     Représente un Snake.
     """
-    def __init__(self, width: int, height: int) -> None:
+    def __init__(self, width: int = 15, height: int = 15) -> None:
         # Map
         self.width: int = width
         self.height: int = height
