@@ -52,6 +52,7 @@ class AbstractSnake(ABC):
         # Env
         self.score: int = 0
         self.apple: position = None
+        self.maxround: int = 200
         self.debug: bool = False
 
     def checkLimit(self) -> bool:
@@ -134,8 +135,9 @@ class AbstractSnake(ABC):
         """
         Joue une partie
         """
+        round = 0
         self.clear()
-        while True:
+        while round < self.maxround:
             # Fait avancer le Snake
             self.play()
             self.extend()
@@ -150,7 +152,8 @@ class AbstractSnake(ABC):
             else:
                 self.retract()
 
-            self.show()    
+            self.show()   
+            round += 1 
 
     def show(self) -> None:
         """
