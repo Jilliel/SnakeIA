@@ -150,14 +150,14 @@ class AbstractSnake(ABC):
             else:
                 self.retract()
 
-            if self.debug:
-                self.show()
-                sleep(0.15)
+            self.show()    
 
     def show(self) -> None:
         """
         Affiche le Snake.
         """
+        if not self.debug:
+            return
         os.system("clear")
         for i in range(self.height):
             for j in range(self.width):
@@ -171,3 +171,4 @@ class AbstractSnake(ABC):
                     symbole = "-"
                 print(symbole, end=" ")
             print()
+        sleep(0.15)
