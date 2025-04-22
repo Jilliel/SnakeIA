@@ -14,6 +14,18 @@ class Direction:
         self.directions = ((-1, 0), (0, 1), (1, 0), (0, -1))
         self.index = default
     
+    def index(self) -> int:
+        """
+        Renvoie l'indice de la direction actuellement suivie.
+        """
+        return self.index
+    
+    def vector(self) -> tuple[int, int]:
+        """
+        Renvoie le vecteur de déplacement.
+        """
+        return self.directions[self.index]
+    
     def right(self) -> None:
         """
         Tourne à droite
@@ -33,7 +45,7 @@ class Direction:
         Renvoie la case suivante.
         """
         y, x = pos
-        dy, dx = self.directions[self.index]
+        dy, dx = self.vector()
         return y+dy, x+dx
 
 
