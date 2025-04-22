@@ -33,7 +33,7 @@ class Direction:
         Renvoie la case suivante.
         """
         y, x = pos
-        dy, dx = self.vector()
+        dy, dx = self.directions[self.index]
         return y+dy, x+dx
 
 
