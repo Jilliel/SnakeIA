@@ -1,6 +1,6 @@
+from model.estimator import QNetwork, Qtrainer
 from random import random, randint, sample
 from bot.abstract import AbstractSnake
-from model.estimator import QNetwork
 from overrides import overrides
 from collections import deque
 
@@ -14,6 +14,7 @@ class CleverSnake(AbstractSnake):
         self.copyfreq: int = copyfreq
         self.Qfunc: QNetwork = QNetwork(inputsize=9)
         self.Qtarget: QNetwork = QNetwork(inputsize=9)
+        self.Qtrainer: Qtrainer = Qtrainer(self.Qfunc)
         # Buffers variables
         self.move: int = None
         self.batchsize: int = batchsize
@@ -97,8 +98,9 @@ class CleverSnake(AbstractSnake):
         terminal = False
 
         while not terminal:
-            phiO = phi1 
-            self.play(state=phiO)
+
+            phi0 = phi1 
+            self.play(state=phi0)
             self.extend()
 
             # Puis on s'occupe d'attribuer une reward
@@ -127,7 +129,7 @@ class CleverSnake(AbstractSnake):
             self.buffer.append(transition)
             if len(self.buffer) >= self.batchsize:
                 batch = sample(self.buffer, self.batchsize)
-
+                self.Qtrainer.train(batch)
 
             # On gère la sauvegarde du Q network pour permettre plus de stabilité.
             self. N += 1
@@ -137,5 +139,3 @@ class CleverSnake(AbstractSnake):
             # Enfin on gère l'affichage
             if not terminal:
                 self.show()
-            
-            
