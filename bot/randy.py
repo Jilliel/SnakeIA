@@ -4,10 +4,7 @@ from bot.abstract import AbstractSnake
 class RandomSnake(AbstractSnake):
     """
     Snake jouant de façon aléatoire.
-    """
-    def __init__(self, head):
-        super().__init__(head)
-    
+    """    
     def play(self):
         """
         Permet au Snake de changer de direction.

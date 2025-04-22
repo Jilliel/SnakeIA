@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 from collections import deque
+from random import randint
+from time import sleep
+import os
 
 position = tuple[int, int]
 
@@ -38,16 +41,55 @@ class AbstractSnake(ABC):
     """
     Représente un Snake.
     """
-    def __init__(self, head) -> None:
-        self.body = deque([head])
+    def __init__(self, width: int, height: int) -> None:
+        # Map
+        self.width: int = width
+        self.height: int = height
+        # Snake
         self.direction: Direction = Direction()
+        self.start: position = (self.height//2 + 1, self.width//2 + 1)
+        self.body: deque = deque([self.start])
+        # Env
+        self.score: int = 0
+        self.apple: position = None
+        self.debug: bool = False
 
-    def clear(self, head):
+    def checkLimit(self) -> bool:
+        """
+        Indique si la tête est en dehors du terrain.
+        """
+        y, x = self.getHead()
+        return 0 <= y < self.height and 0 <= x < self.width
+    
+    def checkCollision(self) -> bool:
+        """
+        Indique si la tête touche le corps
+        """
+        head = self.body.pop()
+        ret = head in self.body
+        self.body.append(head)
+        return ret
+
+    def addApple(self) -> None:
+        """
+        Crée une pomme.
+        """
+        y = randint(0, self.height-1)
+        x = randint(0, self.width-1)
+        newapple = (y, x)
+        if newapple in self.body:
+            self.addApple()
+        else:
+            self.apple = newapple
+
+    def clear(self) -> None:
         """
         Remet à zéro le Snake.
         """
         self.body.clear()
-        self.body.append(head)
+        self.body.append(self.start)
+        self.addApple()
+        self.score = 0
 
     def getHead(self) -> position:
         """
@@ -55,15 +97,9 @@ class AbstractSnake(ABC):
         """
         return self.body[-1]
     
-    def getBody(self) -> list[position]:
+    def extend(self) -> None:
         """
-        Renvoie le corps du Snake.
-        """
-        return list(self.body)[:-1]
-    
-    def move(self) -> None:
-        """
-        Déplace le Snake.
+        Déplace le Snake dans sa direction.
         """
         head = self.getHead()
         newhead = self.direction.follow(head)
@@ -93,3 +129,45 @@ class AbstractSnake(ABC):
         Permet au Snake de changer de direction.
         """
         pass
+    
+    def run(self) -> None:
+        """
+        Joue une partie
+        """
+        self.clear()
+        while True:
+            # Fait avancer le Snake
+            self.play()
+            self.extend()
+            # Puis s'occupe des évènements courants.
+            if self.getHead() == self.apple:
+                self.score += 1
+                self.addApple()
+            elif not self.checkLimit():
+                break
+            elif self.checkCollision():
+                break
+            else:
+                self.retract()
+
+            if self.debug:
+                self.show()
+                sleep(0.15)
+
+    def show(self) -> None:
+        """
+        Affiche le Snake.
+        """
+        os.system("clear")
+        for i in range(self.height):
+            for j in range(self.width):
+                if (i, j) == self.apple:
+                    symbole = "0"
+                elif (i, j) == self.getHead():
+                    symbole = "X"
+                elif (i, j) in self.body:
+                    symbole = "*"
+                else:
+                    symbole = "-"
+                print(symbole, end=" ")
+            print()
