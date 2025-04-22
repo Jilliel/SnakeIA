@@ -1,7 +1,5 @@
-from snake.game import Game
 from bot.randy import RandomSnake
 
-game = Game()
-game.debug = True
-game.addSnake(RandomSnake)
-game.run()
+snake = RandomSnake(width=15, height=15)
+snake.debug = True
+snake.run()
