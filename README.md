@@ -10,4 +10,3 @@ Ce projet est orgnisé comme qui suit:
 * **root** : Les fichiers courants, comme le README, le script pour lancer un test, etc ...
 * **bot/** : Les fichiers pour le bot.
 * **model/** : Ls fichiers pour le DQN.
-* **snake/** : Les fichiers du jeu.
