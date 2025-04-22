@@ -21,8 +21,7 @@ class QFunction(nn.Module):
 
     def forward(self, state: list[int]) -> torch.Tensor:
         """
-        Fait un forward et renvoie l'indice de l'action la 
-        plus favorable selon la politique.
+        Fait un forward.
         """
         X = torch.tensor(state, dtype=torch.float64)
         with torch.no_grad():
@@ -30,3 +29,10 @@ class QFunction(nn.Module):
             A1 = torch.relu(Z1)
             Z2 = self.T2(A1)
         return Z2
+
+    def getMove(self, state: list[int]) -> int:
+        """
+        Renvoie l'indice du meilleur coup.
+        """
+        tensor = self.forward(state)
+        return torch.argmax(tensor).item()
