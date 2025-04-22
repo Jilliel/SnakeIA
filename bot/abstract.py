@@ -50,9 +50,10 @@ class AbstractSnake(ABC):
         self.start: position = (self.height//2 + 1, self.width//2 + 1)
         self.body: deque = deque([self.start])
         # Env
+        self.round: int = 0
+        self.maxround: int = 500
         self.score: int = 0
         self.apple: position = None
-        self.maxround: int = 200
         self.debug: bool = False
 
     def checkLimit(self) -> bool:
@@ -90,6 +91,7 @@ class AbstractSnake(ABC):
         self.body.clear()
         self.body.append(self.start)
         self.addApple()
+        self.round = 0
         self.score = 0
 
     def getHead(self) -> position:
@@ -135,9 +137,8 @@ class AbstractSnake(ABC):
         """
         Joue une partie
         """
-        round = 0
         self.clear()
-        while round < self.maxround:
+        while self.round < self.maxround:
             # Fait avancer le Snake
             self.play()
             self.extend()
@@ -153,7 +154,7 @@ class AbstractSnake(ABC):
                 self.retract()
 
             self.show()   
-            round += 1 
+            self.round += 1 
 
     def show(self) -> None:
         """
