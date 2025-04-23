@@ -12,7 +12,7 @@ class Qtrainer:
     """
     Cette classe se charge d'entrainer le Snake
     """
-    def __init__(self, snake: CleverSnake):
+    def __init__(self, snake: CleverSnake) -> None:
         # Snake here
         self.snake: CleverSnake = snake
         # Buffer here
@@ -34,7 +34,7 @@ class Qtrainer:
         self.criterion: nn.MSELoss = nn.MSELoss()
         self.optimizer: optim.Optimizer = optim.Adam(params=self.Qnet.parameters(), lr=self.alpha)
 
-    def learn(self, batch: list[tuple]):
+    def learn(self, batch: list[tuple]) -> None:
         """
         Entraine le réseau sur une itération.
         """
@@ -59,16 +59,16 @@ class Qtrainer:
         loss.backward()
         self.optimizer.step()
     
-    def save(self, filename):
+    def save(self, filename) -> None:
         """
         Sauvegarde l'entrainement.
         """
         weights = self.Qtarget.state_dict()
         torch.save(weights, filename)
     
-    def game(self):
+    def game(self) -> int:
         """
-        Joue une partie et entraine
+        Joue une partie, entraine le snake et renvoie le score.
         """
         # Snake param here
         self.snake.clear()
@@ -92,7 +92,6 @@ class Qtrainer:
             action = self.snake.move
             reward = self.snake.getReward()
             terminal = self.snake.checkTerminal()
-            print(action, reward, terminal)
             phi1 = self.snake.getState()
             transition = (phi0, action, reward, phi1, terminal)
             self.buffer.append(transition)
@@ -108,3 +107,5 @@ class Qtrainer:
                 self.Qtarget.copy(self.Qnet)
             
             self.snake.round += 1
+        
+        return self.snake.score
