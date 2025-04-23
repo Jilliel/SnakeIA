@@ -8,9 +8,9 @@ def testRandSnake():
 
 def testCleverSnake():
     snake = CleverSnake()
-    snake.debug = True
+    snake.debug = False
     snake.run()
 
 if __name__ == "__main__":
-    #testRandSnake()
-    testCleverSnake()
+    testRandSnake()
+    #testCleverSnake()
