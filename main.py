@@ -8,15 +8,18 @@ trainer = Qtrainer(snake)
 history = []
 
 # Iterations data
-epoch = 100
+epoch = 20
 epochsize = 50
 # Does main thing
 for i in range(epoch):
     mscore = 0
     for _ in range(epochsize):
         mscore += trainer.game() / epochsize
-    print(f"Epoch {i}: {mscore}")
+    print(f"Epoch {i}: {mscore:0.1f}")
     history.append(mscore)
+
+#Stores the weights
+trainer.save("weights.pth")
 
 #Création d'un graphe
 plt.plot(history)
