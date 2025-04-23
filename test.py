@@ -1,18 +1,12 @@
 from bot.randy import RandomSnake
-from bot.final import FinalSnake
+from bot.clever import CleverSnake
 
-def testRandSnake():
+def test_random():
     snake = RandomSnake()
     snake.debug = True
     snake.run()
 
-def testFinalSnake():
-    snake = FinalSnake()
-    snake.load("weights.pth")
-    snake.maxround = 2000
-    snake.debug_delay = 0.05
+def test_clever():
+    snake = CleverSnake()
     snake.debug = True
     snake.run()
-
-if __name__ == "__main__":
-    testFinalSnake()
