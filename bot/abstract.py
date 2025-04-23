@@ -187,4 +187,4 @@ class AbstractSnake(ABC):
                     symbole = "-"
                 print(symbole, end=" ")
             print()
-        sleep(self.debug_delay)
+        sleep(self.delay)
