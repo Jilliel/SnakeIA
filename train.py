@@ -8,7 +8,9 @@ snake = TrainingSnake(batchsize=64,
                     learning_rate=0.0005,
                     discount_factor=0.99)
 
-simsize = 0
+snake.load("weights.pth")
+
+simsize = 100
 epochsize = 50
 
 buffer = deque([], maxlen=epochsize)

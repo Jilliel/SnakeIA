@@ -1,16 +1,17 @@
 from bot.randy import RandomSnake
-from bot.student import CleverSnake
+from bot.final import FinalSnake
 
 def testRandSnake():
-    snake = RandomSnake(width=15, height=15)
+    snake = RandomSnake()
     snake.debug = True
     snake.run()
 
-def testCleverSnake():
-    snake = CleverSnake()
-    snake.debug = False
+def testFinalSnake():
+    snake = FinalSnake()
+    snake.load("weights.pth")
+    snake.debug = True
     snake.run()
 
 if __name__ == "__main__":
-    testRandSnake()
-    #testCleverSnake()
+    #testRandSnake()
+    testFinalSnake()
