@@ -4,21 +4,38 @@ from bot.abstract import AbstractSnake
 from overrides import overrides
 from collections import deque
 
-class CleverSnake(AbstractSnake):
-    def __init__(self, width=15, height=15, batchsize=20, buffersize=100, copyfreq=20):
+class TrainingSnake(AbstractSnake):
+    """
+    Ce Snake override les méthodes principales pour permettre l'entrainement du DQN.
+    """
+    def __init__(self, width=15, height=15, batchsize=20, buffersize=100, copyfreq=20, learning_rate=0.01, discount_factor=0.8):
         super().__init__(width, height)
         # Epsilon-greedy policy
-        self.epsilon: float = 0.95
+        self.epsilon: float = 1
         # Q-function variables
         self.N: int = 0
         self.copyfreq: int = copyfreq
         self.Qfunc: QNetwork = QNetwork(inputsize=9)
         self.Qtarget: QNetwork = QNetwork(inputsize=9)
-        self.Qtrainer: Qtrainer = Qtrainer(self.Qfunc)
+        self.Qtrainer: Qtrainer = Qtrainer(self.Qfunc, learning_rate=learning_rate, discount_factor=discount_factor)
         # Buffers variables
         self.move: int = None
         self.batchsize: int = batchsize
         self.buffer: deque = deque([], maxlen=buffersize)
+        # Env variables
+        self.maxround = 300
+
+    def save(self, filename) -> None:
+        """
+        Enregistre le Qnetwork cible dans un fichier .pth
+        """
+        self.Qtarget.save(filename)
+    
+    def load(self, filename) -> None:
+        """
+        Récupère les poids du Qnetwork depuis un fichier .pth
+        """
+        self.Qfunc.load(filename)
 
     def getState(self) -> list[int]:
         """
@@ -52,10 +69,10 @@ class CleverSnake(AbstractSnake):
 
         #Partie distance
         distances = [yh, self.width-xh, self.height-yh, xh]
-        state_dist = [distances[self.direction.index]]
+        state_dist = [distances[self.direction.index] / max(self.height, self.width)]
 
         return state_apple + state_dir + state_dist
-    
+
     def playMove(self):
         """
         Joue le coup passé en argument:
@@ -83,8 +100,20 @@ class CleverSnake(AbstractSnake):
         else:
             self.move = self.Qfunc.getMove(state)
 
-        self.epsilon -= 0.002
+        self.epsilon = max(self.epsilon*0.995, 0.01)
         self.playMove()
+    
+    @overrides
+    def clear(self) -> None:
+        """
+        Remet à zéro le Snake.
+        """
+        self.body.clear()
+        self.body.append(self.start)
+        self.addApple()
+        self.round = 0
+        self.score = 0
+        self.epsilon = 0.1
     
     @overrides
     def run(self):
@@ -92,12 +121,13 @@ class CleverSnake(AbstractSnake):
         Joue une partie
         """
         self.clear()
+
         # Preprocesses phi1
         phi0 = None
         phi1 = self.getState()
         terminal = False
 
-        while not terminal:
+        while not terminal and self.round < self.maxround:
 
             phi0 = phi1 
             self.play(state=phi0)
@@ -106,20 +136,20 @@ class CleverSnake(AbstractSnake):
             # Puis on s'occupe d'attribuer une reward
             if self.getHead() == self.apple:
                 self.score += 1
+                self.maxround += 30
                 self.addApple()
                 # On encourage fortement la collecte de pommes.
-                reward = 10
+                reward = 1
             elif not self.checkLimit():
                 # On pénalise cette erreur.
                 terminal = True
-                reward = -10
+                reward = -1
             elif self.checkCollision():
                 # On pénalise cette erreur.
                 terminal = True
-                reward = -10
+                reward = -1
             else:
-                # On encourage très légèrement la survie.
-                reward = 0.1
+                reward = 0
                 self.retract()
 
             phi1 = self.getState()
@@ -139,3 +169,4 @@ class CleverSnake(AbstractSnake):
             # Enfin on gère l'affichage
             if not terminal:
                 self.show()
+            self.round += 1

@@ -13,5 +13,6 @@ def testFinalSnake():
     snake.run()
 
 if __name__ == "__main__":
-    #testRandSnake()
+    testRandSnake()
+    input("?")
     testFinalSnake()
