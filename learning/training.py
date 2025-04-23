@@ -66,7 +66,7 @@ class Qtrainer:
         weights = self.Qtarget.state_dict()
         torch.save(weights, filename)
     
-    def play(self):
+    def game(self):
         """
         Joue une partie et entraine
         """
