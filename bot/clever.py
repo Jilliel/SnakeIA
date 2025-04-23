@@ -11,7 +11,7 @@ class CleverSnake(AbstractSnake):
         # Q-function variables
         self.Qnet: QNetwork = QNetwork(inputsize=9)
         # Env variables
-        self.maxround = 1500
+        self.maxround = 800
         # Player variables
         self.move: int = None
 
