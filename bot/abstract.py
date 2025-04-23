@@ -51,7 +51,7 @@ class AbstractSnake(ABC):
         self.body: deque = deque([self.start])
         # Env
         self.round: int = 0
-        self.maxround: int = 500
+        self.maxround: int = 100
         self.score: int = 0
         self.apple: position = None
         self.debug: bool = False
