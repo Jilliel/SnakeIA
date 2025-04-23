@@ -1,20 +1,16 @@
-from random import randint
 from bot.abstract import AbstractSnake
+from random import randint
 
 class RandomSnake(AbstractSnake):
-    """
-    Snake jouant de façon aléatoire.
-    """    
     def play(self):
         """
-        Permet au Snake de changer de direction.
+        Joue de façon aléatoire.
         """
         move = randint(0, 2)
-        match move:
+        match move:        
             case 0:
                 self.right()
             case 1:
                 self.left()
-            case 2:
+            case _:
                 pass
-        

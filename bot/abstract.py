@@ -62,7 +62,7 @@ class AbstractSnake(ABC):
         Indique si la tête est en dehors du terrain.
         """
         y, x = self.getHead()
-        return 0 <= y < self.height and 0 <= x < self.width
+        return not (0 <= y < self.height and 0 <= x < self.width)
     
     def checkCollision(self) -> bool:
         """
@@ -73,6 +73,25 @@ class AbstractSnake(ABC):
         self.body.append(head)
         return ret
 
+    def checkTerminal(self) -> bool:
+        """
+        Indique la validité du coup.
+        """
+        if self.getHead() == self.apple:
+            self.score += 1
+            self.addApple()
+            ret = False
+        elif self.checkLimit():
+            ret = True
+        elif self.checkCollision():
+            ret = True
+        elif self.round == self.maxround:
+            ret = True
+        else:
+            self.retract()
+            ret = False
+        return ret
+    
     def addApple(self) -> None:
         """
         Crée une pomme.
@@ -144,16 +163,8 @@ class AbstractSnake(ABC):
             self.play()
             self.extend()
             # Puis s'occupe des évènements courants.
-            if self.getHead() == self.apple:
-                self.score += 1
-                self.addApple()
-            elif not self.checkLimit():
+            if self.checkTerminal():
                 break
-            elif self.checkCollision():
-                break
-            else:
-                self.retract()
-
             self.show()   
             self.round += 1 
 
