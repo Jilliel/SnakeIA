@@ -17,6 +17,4 @@ def test_clever():
     snake.delay = DELAY
     snake.run()
 
-test_random()
-input()
 test_clever()
