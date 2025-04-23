@@ -12,6 +12,20 @@ class QNetwork(nn.Module):
         self.T1 = nn.Linear(inputsize, hiddensize, dtype=torch.float)   
         self.T2 = nn.Linear(hiddensize, outputsize, dtype=torch.float)
 
+    def save(self, filename):
+        """
+        Enregistre les poids dans un fichier.
+        """
+        weights = self.state_dict()
+        torch.save(weights, filename)
+    
+    def load(self, filename):
+        """
+        Télécharge les poids depuis un fichier.
+        """
+        weights = torch.load(filename)
+        self.load_state_dict(weights)
+        
     def copy(self, other: QNetwork):
         """
         Copie un autre DQN.
