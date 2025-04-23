@@ -59,6 +59,13 @@ class Qtrainer:
         loss.backward()
         self.optimizer.step()
     
+    def save(self, filename):
+        """
+        Sauvegarde l'entrainement.
+        """
+        weights = self.Qtarget.state_dict()
+        torch.save(weights, filename)
+    
     def play(self):
         """
         Joue une partie et entraine
