@@ -11,10 +11,11 @@ history = []
 epoch = 100
 epochsize = 50
 # Does main thing
-for _ in range(epoch):
+for i in range(epoch):
     mscore = 0
     for _ in range(epochsize):
         mscore += trainer.game() / epochsize
+    print(f"Epoch {i}: {mscore}")
     history.append(mscore)
 
 #Création d'un graphe
