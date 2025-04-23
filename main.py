@@ -4,12 +4,14 @@ import matplotlib.pyplot as plt
 
 # Objects definition
 snake = CleverSnake()
+snake.load("weights.pth")
+snake.maxround = 1000
 trainer = Qtrainer(snake)
 history = []
 
 # Iterations data
-epoch = 20
-epochsize = 50
+epoch = 50
+epochsize = 20
 # Does main thing
 for i in range(epoch):
     mscore = 0
@@ -22,10 +24,10 @@ for i in range(epoch):
 trainer.save("weights.pth")
 
 #Création d'un graphe
-plt.plot(history)
-plt.xlabel("N° Epoch")
-plt.ylabel("Score moyen")
-plt.savefig("history.png")
+#plt.plot(history)
+#plt.xlabel("N° Epoch")
+#plt.ylabel("Score moyen")
+#plt.savefig("history.png")
 
 #Shows the result
 input("Ready ?")

@@ -9,7 +9,7 @@ class CleverSnake(AbstractSnake):
     def __init__(self, width=15, height=15):
         super().__init__(width, height)
         # Q-function variables
-        self.Qnet: QNetwork = QNetwork(inputsize=9)
+        self.Qnet: QNetwork = QNetwork(inputsize=16)
         # Env variables
         self.maxround = 800
         # Player variables
@@ -39,7 +39,14 @@ class CleverSnake(AbstractSnake):
         - Right: 0-1
         - Down: 0-1
         - Left: 0-1
-        - Distance mur: 1->max(width-height)
+        - Distance mur haut
+        - Distance mur droit
+        - Distance mur bas
+        - Distance mur gauche
+        - Distance corps haut
+        - Distance corps droit
+        - Distance corps bas
+        - Distance corps gauche
         ]
         """
         yh, xh = self.getHead()
@@ -58,8 +65,22 @@ class CleverSnake(AbstractSnake):
         state_dir[self.direction.index] = 1
 
         #Partie distance
-        distances = [yh, self.width-xh, self.height-yh, xh]
-        state_dist = [distances[self.direction.index] / max(self.height, self.width)]
+        max_distance = max(self.height, self.width) # Pour la normalisation
+        state_dist_wall = []
+        state_dist_body = []
+
+        wall_distance = (yh, self.width-xh, self.height-yh, xh)
+        directions = ((-1, 0), (0, 1), (1, 0), (0, -1))
+        for (dy, dx), dist in zip(directions, wall_distance):
+            state_dist_wall.append(dist / max_distance)
+            dmin = dist
+            for i in range(1, dist):
+                if (yh + i * dy, xh + i * dx) in self.body:
+                    dmin = i
+                    break
+            state_dist_body.append(dmin / max_distance)
+            
+        state_dist = state_dist_wall + state_dist_body
 
         return state_apple + state_dir + state_dist
 

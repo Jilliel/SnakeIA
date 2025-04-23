@@ -6,7 +6,7 @@ class QNetwork(nn.Module):
     """
     Représente un DQN.
     """
-    def __init__(self, inputsize=8, hiddensize = 12, outputsize=3):
+    def __init__(self, inputsize=16, hiddensize = 15, outputsize=3):
         super().__init__()
         self.T1 = nn.Linear(inputsize, hiddensize, dtype=torch.float)   
         self.T2 = nn.Linear(hiddensize, outputsize, dtype=torch.float)
