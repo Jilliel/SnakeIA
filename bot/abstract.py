@@ -55,6 +55,7 @@ class AbstractSnake(ABC):
         self.score: int = 0
         self.apple: position = None
         self.debug: bool = False
+        self.debug_delay: float = 0.15
 
     def checkLimit(self) -> bool:
         """
@@ -175,4 +176,4 @@ class AbstractSnake(ABC):
                     symbole = "-"
                 print(symbole, end=" ")
             print()
-        sleep(0.15)
+        sleep(self.debug_delay)
