@@ -25,7 +25,7 @@ class Qtrainer:
         self.gamma: float = 0.99 #Discount factor
         self.alpha: float = 0.0005 #Learing rate
         self.epsilon: float = 1 #Pour la politique epsilon greedy
-        self.epsilon_inf: float = 0.01 # .
+        self.epsilon_inf: float = 0.02 # .
         self.epsilon_factor: float = 0.995 # .
         # Networks here
         self.Qnet: QNetwork = snake.Qnet
