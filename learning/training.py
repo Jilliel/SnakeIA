@@ -30,6 +30,7 @@ class Qtrainer:
         # Networks here
         self.Qnet: QNetwork = snake.Qnet
         self.Qtarget: QNetwork = QNetwork()
+        self.Qtarget.copy(self.Qnet)
         # Optimizer here
         self.criterion: nn.MSELoss = nn.MSELoss()
         self.optimizer: optim.Optimizer = optim.Adam(params=self.Qnet.parameters(), lr=self.alpha)
@@ -51,7 +52,7 @@ class Qtrainer:
             newvalues = torch.where(
                 mask,
                 rewards,
-                rewards + self.gamma * torch.max(self.Qnet(states1), dim=1)[0]
+                rewards + self.gamma * torch.max(self.Qtarget(states1), dim=1)[0]
             )
 
         loss: torch.Tensor = self.criterion(values, newvalues)
