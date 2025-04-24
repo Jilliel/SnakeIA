@@ -28,6 +28,12 @@ class Direction:
         self.index -= 1
         self.index %= 4
     
+    def vector(self) -> tuple[int, int]:
+        """
+        Renvoie le vecteur de déplacement.
+        """
+        return self.directions[self.index]
+
     def follow(self, pos) -> position:
         """
         Renvoie la case suivante.
