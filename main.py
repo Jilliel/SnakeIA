@@ -7,11 +7,12 @@ snake = CleverSnake()
 snake.load("weights.pth")
 snake.maxround = 1500
 trainer = Qtrainer(snake)
+trainer.epsilon_inf = 0.05
 history = []
 
 # Iterations data
-epoch = 200
-epochsize = 20
+epoch = 500
+epochsize = 50
 # Does main thing
 for i in range(epoch):
     mscore = 0
@@ -21,7 +22,7 @@ for i in range(epoch):
     history.append(mscore)
 
 #Stores the weights
-trainer.save("weights.pth")
+trainer.save("weights2.pth")
 
 #Création d'un graphe
 #plt.plot(history)
