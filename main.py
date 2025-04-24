@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 # Objects definition
 snake = CleverSnake()
 snake.load("weights.pth")
-snake.maxround = 1000
+snake.maxround = 1500
 trainer = Qtrainer(snake)
 history = []
 
 # Iterations data
-epoch = 50
+epoch = 200
 epochsize = 20
 # Does main thing
 for i in range(epoch):
