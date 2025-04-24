@@ -28,8 +28,3 @@ trainer.save("weights.pth")
 #plt.xlabel("N° Epoch")
 #plt.ylabel("Score moyen")
 #plt.savefig("history.png")
-
-#Shows the result
-input("Ready ?")
-snake.debug = True
-snake.run()
